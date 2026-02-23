@@ -29,7 +29,7 @@ public class User {
     inverseJoinColumns = @JoinColumn(name = "role_id"))
     private  Set<Role> roles;
 
-    @OneToMany(mappedBy = "treinos")
+    @OneToMany(mappedBy = "personal")
     private List<Treino> treinos;
 
 
