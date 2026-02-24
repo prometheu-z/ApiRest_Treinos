@@ -39,7 +39,7 @@ public class TokenController {
     public ResponseEntity<LoginResponse> login (@RequestBody LoginRequest loginRequest){
         var user = usuarioService.findByNome(loginRequest.nome());
 
-        if(user.isEmpty() || user.get().isLoginCorreto(loginRequest, bCryptPasswordEncoder)){
+        if(user.isEmpty() || !user.get().isLoginCorreto(loginRequest, bCryptPasswordEncoder)){
             throw new BadCredentialsException("Senha incorreta");
         }
 
