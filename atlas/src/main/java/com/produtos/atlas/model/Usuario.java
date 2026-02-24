@@ -1,9 +1,10 @@
 package com.produtos.atlas.model;
 
 
+import com.produtos.atlas.dto.LoginRequest;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.query.sql.internal.ParameterRecognizerImpl;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 import java.util.Set;
@@ -14,14 +15,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class User {
+public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userName;
+    @Column(unique = true)
+    private String nome;
 
-    private String password;
+    private String Senha;
 
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinTable(name = "tb_user_roles",
@@ -31,6 +33,11 @@ public class User {
 
     @OneToMany(mappedBy = "personal")
     private List<Treino> treinos;
+
+    public boolean isLoginCorreto(LoginRequest loginRequest, PasswordEncoder passwordEncoder){
+        return passwordEncoder.matches(loginRequest.senha(), this.Senha);
+    }
+
 
 
 
