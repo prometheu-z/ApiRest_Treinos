@@ -3,6 +3,7 @@ package com.produtos.atlas.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -18,11 +19,10 @@ public class Treino {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToMany(mappedBy = "treino")
-    private List<ItemTreino> itemTreinos;
+    @OneToMany(mappedBy = "treino", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<ItemTreino> itemTreinos = new ArrayList<>();
 
     @ManyToOne
-    @JoinColumn(name = "personal_id")
     private Usuario personal;
 
     private String nome;
