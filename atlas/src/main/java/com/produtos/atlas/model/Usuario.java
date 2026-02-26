@@ -1,7 +1,7 @@
 package com.produtos.atlas.model;
 
 
-import com.produtos.atlas.dto.LoginRequest;
+import com.produtos.atlas.dto.UsuarioReqDTO;
 import jakarta.persistence.*;
 import lombok.*;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,17 +25,20 @@ public class Usuario {
 
     private String Senha;
 
+    @ManyToOne
+    private Usuario personal;
+
     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinTable(name = "tb_user_roles",
-    joinColumns = @JoinColumn(name = "user_id"),
-    inverseJoinColumns = @JoinColumn(name = "role_id"))
+    @JoinTable(name = "tb_usuario_roles",
+    joinColumns = @JoinColumn(name = "usuario"),
+    inverseJoinColumns = @JoinColumn(name = "role"))
     private  Set<Role> roles;
 
-    @OneToMany(mappedBy = "personal")
-    private List<Treino> treinos;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<UsuarioTreino> treinosAtribuidos;
 
-    public boolean isLoginCorreto(LoginRequest loginRequest, PasswordEncoder passwordEncoder){
-        return passwordEncoder.matches(loginRequest.senha(), this.Senha);
+    public boolean isLoginCorreto(UsuarioReqDTO usuarioReqDTO, PasswordEncoder passwordEncoder){
+        return passwordEncoder.matches(usuarioReqDTO.senha(), this.Senha);
     }
 
 

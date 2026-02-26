@@ -38,7 +38,6 @@ public class AdminUserConfig implements CommandLineRunner {
             user.setNome("admin");
             user.setSenha(bCryptPasswordEncoder.encode("1234"));
 
-            // Agora roleAdmin com certeza tem um valor válido! Sem NPE aqui.
             user.setRoles(Set.of(roleAdmin));
 
             usuarioService.salvar(user);

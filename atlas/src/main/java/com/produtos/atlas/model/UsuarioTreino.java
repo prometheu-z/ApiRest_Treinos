@@ -1,10 +1,11 @@
 package com.produtos.atlas.model;
 
+import com.produtos.atlas.model.Treino;
+import com.produtos.atlas.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.sound.midi.Soundbank;
-import java.security.PrivateKey;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -12,25 +13,20 @@ import java.security.PrivateKey;
 @AllArgsConstructor
 @NoArgsConstructor
 @EqualsAndHashCode
-public class ItemTreino {
+public class UsuarioTreino {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    private Exercicio exercicio;
+    private Usuario usuario;
 
     @ManyToOne
     private Treino treino;
 
-    private Double peso;
+    private LocalDate data;
 
-    private String repeticoes;
-
-    private int series;
-
-    private int desacnso;
-
-    private String obs;
+    private String status;
 
 }
