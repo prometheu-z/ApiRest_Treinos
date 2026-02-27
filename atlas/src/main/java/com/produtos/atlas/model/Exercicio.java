@@ -19,7 +19,7 @@ public class Exercicio {
 
     private String nome;
 
-    private String GrupoMuscular;
+    private String grupoMuscular;
 
     private String video;
 }

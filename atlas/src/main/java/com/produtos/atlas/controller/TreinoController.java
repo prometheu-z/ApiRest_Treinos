@@ -1,8 +1,10 @@
 package com.produtos.atlas.controller;
 
 import com.produtos.atlas.dto.*;
+import com.produtos.atlas.model.Exercicio;
 import com.produtos.atlas.model.ItemTreino;
 import com.produtos.atlas.model.Treino;
+import com.produtos.atlas.service.ExercicioService;
 import com.produtos.atlas.service.TreinoService;
 import com.produtos.atlas.service.UsuarioService;
 import jakarta.transaction.Transactional;
@@ -25,6 +27,9 @@ public class TreinoController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private ExercicioService exercicioService;
+
     @PostMapping
     @Transactional
     @PreAuthorize("hasAnyAuthority('SCOPE_PERSONAL', 'SCOPE_ADMIN')")
@@ -46,6 +51,18 @@ public class TreinoController {
 
     }
 
+    @GetMapping("/exercicios")
+    public ResponseEntity<FeedExercicioDTO> listarExercicios(@RequestParam(value = "nome", defaultValue = "") String nome,
+                                                   @RequestParam(value = "grupoMuscular", defaultValue = "") String grupoMuscular,
+                                                   @RequestParam(value = "pagina", defaultValue = "0") int pagina,
+                                                   @RequestParam(value = "tamanho", defaultValue = "10") int tamanho){
+        Page<ExercicioResDTO> exercicios = exercicioService.buscarExeercicios(grupoMuscular, nome, pagina, tamanho)
+                .map(exercicio -> new ExercicioResDTO(exercicio.getGrupoMuscular(), exercicio.getNome(),exercicio.getVideo()));
+
+        return ResponseEntity.ok(new FeedExercicioDTO(exercicios.getContent(), pagina, tamanho, exercicios.getTotalPages(), exercicios.getTotalElements()));
+
+    }
+
     @GetMapping
     public ResponseEntity<FeedTreinosDTO> treinos(@RequestParam(value = "pagina", defaultValue = "0") int pagina,
                                                   @RequestParam(value = "tamanho", defaultValue = "10") int tamanho,
@@ -64,10 +81,12 @@ public class TreinoController {
     }
 
     @PutMapping("/{id}")
+    @Transactional
     public ResponseEntity<TreinoResDTO> alterarTreino(@RequestBody TreinoReqDTO dto, @PathVariable("id") Long treinoId, JwtAuthenticationToken token){
         Treino treino = treinoService.findById(treinoId).orElseThrow(
                 () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Treino não encontrado")
         );
+
 
         if(treino.getPersonal().getId().equals(Long.parseLong(token.getName()))){
             treino.setNome(dto.nome());
@@ -76,9 +95,15 @@ public class TreinoController {
 
             if(dto.itemTreinos() != null){
                 dto.itemTreinos().forEach(novo -> {
+
+
+                    Exercicio exercicio = exercicioService.findById(novo.exercicioId()).orElseThrow(
+                            () -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Exercicio não encontrado")
+                    );
+
                     ItemTreino item = new ItemTreino();
                     item.setTreino(treino);
-                    item.setExercicio(novo.exercicio());
+                    item.setExercicio(exercicio);
                     item.setRepeticoes(novo.repeticoes());
                     item.setSeries(novo.serie());
                     item.setPeso(novo.peso());
@@ -104,6 +129,7 @@ public class TreinoController {
 
 
     @DeleteMapping("/{id}")
+    @Transactional
     public ResponseEntity<Void> deleteTreino(@PathVariable("id") Long treinoId, JwtAuthenticationToken token){
 
         Treino treino = treinoService.findById(treinoId).orElseThrow(
