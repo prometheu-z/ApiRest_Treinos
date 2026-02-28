@@ -57,7 +57,7 @@ public class TreinoController {
                                                    @RequestParam(value = "pagina", defaultValue = "0") int pagina,
                                                    @RequestParam(value = "tamanho", defaultValue = "10") int tamanho){
         Page<ExercicioResDTO> exercicios = exercicioService.buscarExeercicios(grupoMuscular, nome, pagina, tamanho)
-                .map(exercicio -> new ExercicioResDTO(exercicio.getGrupoMuscular(), exercicio.getNome(),exercicio.getVideo()));
+                .map(exercicio -> new ExercicioResDTO(exercicio.getId(),exercicio.getGrupoMuscular(), exercicio.getNome(),exercicio.getVideo()));
 
         return ResponseEntity.ok(new FeedExercicioDTO(exercicios.getContent(), pagina, tamanho, exercicios.getTotalPages(), exercicios.getTotalElements()));
 

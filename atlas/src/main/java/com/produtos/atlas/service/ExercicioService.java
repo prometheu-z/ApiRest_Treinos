@@ -22,4 +22,19 @@ public class ExercicioService {
     public Page<Exercicio> buscarExeercicios(String grupoMuscular, String nome, int pagina, int tamanho){
         return exercicioRepository.findByGrupoMuscularContainingIgnoreCaseOrNomeContainingIgnoreCase(grupoMuscular, nome, PageRequest.of(pagina,tamanho));
     }
+
+    public Exercicio salvar(Exercicio exercicio){
+        return exercicioRepository.save(exercicio);
+    }
+
+
+    public Optional<Exercicio> findByNome(String nome){
+        return exercicioRepository.findByNome(nome);
+    }
+
+    public void deleter(Exercicio exercicio){
+        exercicioRepository.delete(exercicio);
+        return;
+    }
+
 }
