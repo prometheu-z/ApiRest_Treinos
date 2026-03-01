@@ -1,11 +1,10 @@
 package com.produtos.atlas.model;
 
-import com.produtos.atlas.model.Treino;
-import com.produtos.atlas.model.Usuario;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Getter
@@ -25,7 +24,7 @@ public class UsuarioTreino {
     @ManyToOne
     private Treino treino;
 
-    private LocalDate data;
+    private List<LocalDate> datas;
 
     private String status;
 

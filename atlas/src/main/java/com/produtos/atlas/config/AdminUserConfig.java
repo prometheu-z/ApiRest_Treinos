@@ -2,8 +2,9 @@ package com.produtos.atlas.config;
 
 import com.produtos.atlas.model.Role;
 import com.produtos.atlas.model.Usuario;
-import com.produtos.atlas.service.RoleService;
+import com.produtos.atlas.service.impl.RoleServiceImp;
 import com.produtos.atlas.service.UsuarioService;
+import com.produtos.atlas.service.impl.UsuarioServiceImp;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -17,17 +18,17 @@ import java.util.Set;
 public class AdminUserConfig implements CommandLineRunner {
 
     @Autowired
-    private UsuarioService usuarioService;
+    private UsuarioServiceImp usuarioService;
 
     @Autowired
-    private RoleService roleService;
+    private RoleServiceImp roleService;
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Override
     @Transactional
-    public void run(String... args) throws Exception {
+    public void run(String... args) {
         var roleAdmin = roleService.findByNome(Role.Values.ADMIN.name());
 
 
