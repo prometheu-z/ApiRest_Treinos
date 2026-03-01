@@ -3,8 +3,6 @@ package com.produtos.atlas.model;
 import jakarta.persistence.*;
 import lombok.*;
 
-import javax.sound.midi.Soundbank;
-import java.security.PrivateKey;
 
 @Entity
 @Getter
